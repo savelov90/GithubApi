@@ -1,0 +1,18 @@
+<resources>
+    <!-- item_view -->
+    <dimen name="item_height_dp">100dp</dimen>
+    <dimen name="item_elevation_dp">1dp</dimen>
+    <dimen name="item_corner_dp">10dp</dimen>
+    <dimen name="item_text_size_sp">20sp</dimen>
+    <dimen name="item_text_margin_start">15dp</dimen>
+    <dimen name="item_text_margin_top">10dp</dimen>
+    <dimen name="item_text_height">20dp</dimen>
+
+    <!-- details_fragment -->
+    <dimen name="margin">15dp</dimen>
+    <dimen name="details_corner_dp">10dp</dimen>
+    <dimen name="card_margin_top">20dp</dimen>
+    <dimen name="details_text_margin_top">15dp</dimen>
+    <dimen name="details_text_margin_bottom">40dp</dimen>
+
+</resources>
