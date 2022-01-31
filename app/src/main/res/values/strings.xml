@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">GithubApi</string>
-    <string name="toast_home">Что-то пошло не так</string>
-    <string name="toast_details">Локальный режим работы</string>
+    <string name="toast_home_api">Локальный режим работы</string>
+    <string name="toast_home_db">Локальная база данных пуста</string>
     <string name="liner">:</string>
 </resources>

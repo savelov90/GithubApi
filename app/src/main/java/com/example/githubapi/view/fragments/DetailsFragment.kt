@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.githubapi.R
+import com.example.githubapi.data.api_data.RepoResultItem
 import com.example.githubapi.databinding.FragmentDetailsBinding
 import com.example.githubapi.viewmodel.DetailsFragmentViewModel
 import com.example.githubapi.disposable.AutoDisposable
@@ -23,9 +24,9 @@ private const val KEY = "repo"
 
 class DetailsFragment : Fragment() {
 
-/*    private lateinit var binding: FragmentDetailsBinding
-    private lateinit var album: ResultAlbums
-    private lateinit var allTracks: Observable<List<String>>
+    private lateinit var binding: FragmentDetailsBinding
+    //private lateinit var album: ResultAlbums
+    //private lateinit var allTracks: Observable<List<String>>
     private val autoDisposable = AutoDisposable()
     private val viewModel by lazy {
         ViewModelProvider.NewInstanceFactory().create(DetailsFragmentViewModel::class.java)
@@ -47,9 +48,9 @@ class DetailsFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun setAlbumsDetails() {
-        album = arguments?.getParcelable<ResultAlbums>(KEY) as ResultAlbums
+        val repo = arguments?.getParcelable<RepoResultItem>(KEY)
 
-        allTracks = viewModel.getTracks(album.collectionId.toString())
+        /*allTracks = viewModel.getTracks(album.collectionId.toString())
         allTracks.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -65,19 +66,22 @@ class DetailsFragment : Fragment() {
                     setTrackNames(it)
                 }
             )
-            .addTo(autoDisposable)
+            .addTo(autoDisposable)*/
 
-        Picasso.get()
-            .load(album.artworkUrl100)
-            .into(binding.detailsPicture)
+        if (repo != null) {
+            Picasso.get()
+                .load(repo.owner.avatar_url)
+                .error(android.R.drawable.stat_notify_error)
+                .into(binding.detailsAvatar)
+        } else {
+            binding.detailsAvatar.setImageResource(R.drawable.white)
+        }
 
-        binding.detailsAlbumName.text = album.collectionName
-        binding.detailsArtistName.text = album.artistName
-        binding.detailsGenre.text = album.primaryGenreName
-        binding.detailsYear.text = album.releaseDate.dropLast(16)
+        binding.detailsLogin.text = repo?.owner?.login
+        binding.detailsRepoName.text = repo?.full_name
     }
 
-    private fun setTrackNames(list: List<String>) {
+/*    private fun setTrackNames(list: List<String>) {
         val tracksNameList = mutableListOf<String>()
         for (i in list.indices) {
             if (list[i] != null) {

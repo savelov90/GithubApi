@@ -14,9 +14,7 @@ class Interactor(
     private val retrofitService: RepoAPI
 ) {
 
-    fun getRepoFromApi(since: String): Single<MutableList<RepoResultItem>> {
-
-        val resultObservable = retrofitService.getRepo(since)
+    fun getRepoFromApi(since: String): Single<MutableList<RepoResultItem>> = retrofitService.getRepo(since)
             .subscribeOn(Schedulers.io())
             .map { result ->
                 val list = mutableListOf<RepoResultItem>()
@@ -25,22 +23,12 @@ class Interactor(
                 }
                 list
             }
+            .doAfterSuccess {
+                repo.deleteAll()
+                repo.putToDb(it)
+            }
 
-        resultObservable.subscribeBy(
-                onError = {
-
-                },
-                onSuccess = {
-
-                }
-            )
-
-        return resultObservable
-    }
-
-
-
-
+    fun getRepoFromDB(): Single<List<RepoResultItem>> = repo.getAllFromDB()
 
 /*    fun getTracksFromApi(albumId: String): Observable<List<String>> = retrofitService
         .getTracks(albumId, TRACK_ENTITY)
@@ -53,6 +41,4 @@ class Interactor(
             list.forEach { tracksNameList.add(it.trackName) }
             tracksNameList
         }*/
-
-/*    fun getAlbumsFromDB(): Observable<List<ResultAlbums>> = repo.getAllFromDB()*/
 }

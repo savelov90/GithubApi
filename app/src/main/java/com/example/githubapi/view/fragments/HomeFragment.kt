@@ -69,10 +69,10 @@ class HomeFragment : Fragment() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onError = {
-                    // getLastSavedAlbums()
+                    getLastSavedRepo()
                     Toast.makeText(
                         requireContext(),
-                        getString(R.string.toast_details),
+                        getString(R.string.toast_home_api),
                         Toast.LENGTH_SHORT
                     ).show()
                 },
@@ -83,13 +83,22 @@ class HomeFragment : Fragment() {
             .addTo(autoDisposable)
     }
 
-    /* private fun getLastSavedAlbums() {
-         allAlbums = viewModel.albumsListData
-         allAlbums.subscribeOn(Schedulers.io())
-             .observeOn(AndroidSchedulers.mainThread())
-             .subscribe { list ->
-                 repoAdapter.addItems(list)
-             }
-             .addTo(autoDisposable)
-     }*/
+    private fun getLastSavedRepo() {
+        val repoDB = viewModel.getRepoFromDB()
+        repoDB.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onError = {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.toast_home_db),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                },
+                onSuccess = {
+                    repoAdapter.addItems(it)
+                }
+            )
+            .addTo(autoDisposable)
+    }
 }
