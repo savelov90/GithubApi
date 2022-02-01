@@ -28,6 +28,8 @@ class HomeFragment : Fragment() {
 
     private lateinit var repoAdapter: RepoListRecyclerAdapter
     private lateinit var binding: FragmentHomeBinding
+    var repos = mutableListOf<RepoResultItem>()
+    var launch = true
     private val autoDisposable = AutoDisposable()
     private val viewModel by lazy {
         ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
@@ -45,7 +47,12 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         autoDisposable.bindTo(lifecycle)
         initRecyckler()
-        getReposFromApi()
+        if (launch) {
+            getReposFromApi()
+        } else {
+            getLastSavedRepo()
+        }
+        launch = false
     }
 
     private fun initRecyckler() {
@@ -53,6 +60,8 @@ class HomeFragment : Fragment() {
             repoAdapter =
                 RepoListRecyclerAdapter(object : RepoListRecyclerAdapter.OnItemClickListener {
                     override fun click(repoResultItem: RepoResultItem) {
+                        viewModel.deleteAllFromDB()
+                        viewModel.putToDB(repos)
                         (requireActivity() as MainActivity).launchDetailsFragment(repoResultItem)
                     }
                 })
@@ -76,8 +85,11 @@ class HomeFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 },
-                onSuccess = {
-                    repoAdapter.addItems(it)
+                onSuccess = {list ->
+                    repoAdapter.addItems(list)
+                    list.forEach {
+                        repos.add(it)
+                    }
                 }
             )
             .addTo(autoDisposable)

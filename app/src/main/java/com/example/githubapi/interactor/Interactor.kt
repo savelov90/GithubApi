@@ -36,4 +36,8 @@ class Interactor(
         .getCommits(login, fullName)
         .subscribeOn(Schedulers.io())
         .map { it[ITEM] }
+
+    fun deleteFromDB() = repo.deleteAll()
+
+    fun putToDB(list: MutableList<RepoResultItem>) = repo.putToDb(list)
 }

@@ -22,4 +22,8 @@ class HomeFragmentViewModel : ViewModel() {
         interactor.getRepoFromApi(since)
 
     fun getRepoFromDB(): Single<List<RepoResultItem>> = interactor.getRepoFromDB()
+
+    fun deleteAllFromDB() = interactor.deleteFromDB()
+
+    fun putToDB(list: MutableList<RepoResultItem>) = interactor.putToDB(list)
 }
