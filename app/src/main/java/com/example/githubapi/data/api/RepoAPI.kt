@@ -16,8 +16,9 @@ interface RepoAPI {
         @Query(SINCE) pagination: String,
     ): Single<RepoResult>
 
-    @GET("repos/{name}/commits")
-    fun getTracks(
+    @GET("repos/{login}/{name}/commits")
+    fun getCommits(
+        @Path("login") login: String,
         @Path("name") name: String
     ): Single<AllCommits>
 }

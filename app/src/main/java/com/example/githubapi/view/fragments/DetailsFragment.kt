@@ -5,21 +5,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.githubapi.R
+import com.example.githubapi.data.api_data.commits.AllCommitsItem
 import com.example.githubapi.data.api_data.repos.RepoResultItem
 import com.example.githubapi.databinding.FragmentDetailsBinding
-import com.example.githubapi.viewmodel.DetailsFragmentViewModel
 import com.example.githubapi.disposable.AutoDisposable
+import com.example.githubapi.disposable.addTo
+import com.example.githubapi.viewmodel.DetailsFragmentViewModel
 import com.squareup.picasso.Picasso
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.kotlin.subscribeBy
+import io.reactivex.rxjava3.schedulers.Schedulers
+
 
 private const val KEY = "repo"
 
 class DetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailsBinding
-    //private lateinit var allTracks: Observable<List<String>>
     private val autoDisposable = AutoDisposable()
     private val viewModel by lazy {
         ViewModelProvider.NewInstanceFactory().create(DetailsFragmentViewModel::class.java)
@@ -36,30 +42,13 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         autoDisposable.bindTo(lifecycle)
-        setAlbumsDetails()
+        setRepoDetails()
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setAlbumsDetails() {
+    private fun setRepoDetails() {
         val repo = arguments?.getParcelable<RepoResultItem>(KEY)
-
-        /*allTracks = viewModel.getTracks(album.collectionId.toString())
-        allTracks.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(
-                onError = {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.toast_details),
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                },
-                onNext = {
-                    setTrackNames(it)
-                }
-            )
-            .addTo(autoDisposable)*/
+        repo?.let { getCommitFromApi(it.owner.login, it.name) }
 
         if (repo != null) {
             Picasso.get()
@@ -71,16 +60,38 @@ class DetailsFragment : Fragment() {
         }
 
         binding.detailsLogin.text = repo?.owner?.login
-        binding.detailsRepoName.text = repo?.full_name
+        binding.detailsRepoName.text = repo?.name
     }
 
-/*    private fun setTrackNames(list: List<String>) {
-        val tracksNameList = mutableListOf<String>()
-        for (i in list.indices) {
-            if (list[i] != null) {
-                tracksNameList.add(i.toString() + "   " + list[i])
-            }
-        }
-        binding.detailsTracks.text = tracksNameList.joinToString("\n")
-    }*/
+    private fun getCommitFromApi(login: String, fullName: String) {
+        val commit = viewModel.getCommit(login, fullName)
+        commit.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onError = {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.toast_detail_api),
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                },
+                onSuccess = {
+                    setCommitDetails(it)
+                }
+            )
+            .addTo(autoDisposable)
+    }
+
+    private fun setCommitDetails(commitsItem: AllCommitsItem) {
+        binding.detailsCommitMessage.text = commitsItem.commit.message
+        binding.detailsCommiterName.text = commitsItem.commit.author.name
+        binding.detailsCommitDate.text = editData(commitsItem.commit.author.date)
+    }
+
+    private fun editData(data:String) : String {
+        val edit = data.toCharArray()
+        val string = "${edit[8]}" + "${edit[9]}" + "." + "${edit[5]}" + "${edit[6]}" + "." + "${edit[0]}" + "${edit[1]}" + "${edit[2]}" + "${edit[3]}"
+        return string
+    }
 }

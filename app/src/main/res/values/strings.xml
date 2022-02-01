@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">GithubApi</string>
     <string name="toast_home_api">Локальный режим работы</string>
+    <string name="toast_detail_api">Локальный режим работы</string>
     <string name="toast_home_db">Локальная база данных пуста</string>
     <string name="liner">:</string>
+    <string name="last_commit">LAST COMMIT</string>
+    <string name="parents">PARENTS</string>
 </resources>
