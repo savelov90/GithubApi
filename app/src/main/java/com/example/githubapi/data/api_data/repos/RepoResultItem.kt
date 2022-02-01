@@ -1,4 +1,4 @@
-package com.example.githubapi.data.api_data
+package com.example.githubapi.data.api_data.repos
 
 import android.os.Parcelable
 import androidx.room.*

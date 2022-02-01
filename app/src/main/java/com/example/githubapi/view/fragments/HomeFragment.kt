@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.githubapi.R
-import com.example.githubapi.data.api_data.RepoResultItem
+import com.example.githubapi.data.api_data.repos.RepoResultItem
 import com.example.githubapi.databinding.FragmentHomeBinding
 import com.example.githubapi.disposable.AutoDisposable
 import com.example.githubapi.disposable.addTo

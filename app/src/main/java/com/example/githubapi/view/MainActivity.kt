@@ -3,7 +3,7 @@ package com.example.githubapi.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.githubapi.R
-import com.example.githubapi.data.api_data.RepoResultItem
+import com.example.githubapi.data.api_data.repos.RepoResultItem
 import com.example.githubapi.databinding.ActivityMainBinding
 import com.example.githubapi.view.fragments.DetailsFragment
 import com.example.githubapi.view.fragments.HomeFragment

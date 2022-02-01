@@ -1,10 +1,6 @@
-package com.example.githubapi.data.api_data
+package com.example.githubapi.data.api_data.commits
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-data class Owner(
+data class Author(
     val avatar_url: String,
     val events_url: String,
     val followers_url: String,
@@ -23,4 +19,4 @@ data class Owner(
     val subscriptions_url: String,
     val type: String,
     val url: String
-) : Parcelable
+)

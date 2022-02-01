@@ -5,27 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.githubapi.R
-import com.example.githubapi.data.api_data.RepoResultItem
+import com.example.githubapi.data.api_data.repos.RepoResultItem
 import com.example.githubapi.databinding.FragmentDetailsBinding
 import com.example.githubapi.viewmodel.DetailsFragmentViewModel
 import com.example.githubapi.disposable.AutoDisposable
-import com.example.githubapi.disposable.addTo
 import com.squareup.picasso.Picasso
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.kotlin.subscribeBy
-import io.reactivex.rxjava3.schedulers.Schedulers
 
 private const val KEY = "repo"
 
 class DetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailsBinding
-    //private lateinit var album: ResultAlbums
     //private lateinit var allTracks: Observable<List<String>>
     private val autoDisposable = AutoDisposable()
     private val viewModel by lazy {

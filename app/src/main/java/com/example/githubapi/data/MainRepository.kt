@@ -1,6 +1,6 @@
 package com.example.githubapi.data
 
-import com.example.githubapi.data.api_data.RepoResultItem
+import com.example.githubapi.data.api_data.repos.RepoResultItem
 import com.example.githubapi.data.db.dao.RepoDAO
 import io.reactivex.rxjava3.core.Single
 

@@ -3,7 +3,7 @@ package com.example.githubapi.view.rv_viewholders
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubapi.R
-import com.example.githubapi.data.api_data.RepoResultItem
+import com.example.githubapi.data.api_data.repos.RepoResultItem
 import com.example.githubapi.databinding.RepoItemBinding
 import com.squareup.picasso.Picasso
 

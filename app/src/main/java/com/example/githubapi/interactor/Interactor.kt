@@ -3,10 +3,8 @@ package com.example.githubapi.interactor
 
 import com.example.githubapi.data.MainRepository
 import com.example.githubapi.data.api.RepoAPI
-import com.example.githubapi.data.api_data.RepoResultItem
-import io.reactivex.rxjava3.core.Observable
+import com.example.githubapi.data.api_data.repos.RepoResultItem
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class Interactor(
