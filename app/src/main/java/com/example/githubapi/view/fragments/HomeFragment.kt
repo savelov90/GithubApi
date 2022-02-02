@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.githubapi.R
 import com.example.githubapi.data.api_data.repos.RepoResultItem
 import com.example.githubapi.databinding.FragmentHomeBinding
@@ -26,8 +27,12 @@ private const val SINCE = "0"
 
 class HomeFragment : Fragment() {
 
+    private lateinit var recycler: RecyclerView
     private lateinit var repoAdapter: RepoListRecyclerAdapter
     private lateinit var binding: FragmentHomeBinding
+
+    private var lastPosition = 0
+    lateinit var layout: LinearLayoutManager
     var repos = mutableListOf<RepoResultItem>()
     var launch = true
     private val autoDisposable = AutoDisposable()
@@ -46,34 +51,67 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         autoDisposable.bindTo(lifecycle)
-        initRecyckler()
+
+        recycler = initRecyckler()
+        recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                lastPosition = layout.findFirstCompletelyVisibleItemPosition()
+            }
+        })
+        repoAdapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+
         if (launch) {
-            getReposFromApi()
+            getReposFromApi(SINCE)
+            launch = false
         } else {
             getLastSavedRepo()
         }
-        launch = false
+
+        binding.button.setOnClickListener {
+            getReposFromApi("100")
+        }
+
+        lastPosition = viewModel.getPositionFromPreferences()
+        recycler.scrollToPosition(lastPosition)
+        println(lastPosition)
     }
 
-    private fun initRecyckler() {
-        binding.mainRecycler.apply {
+    override fun onResume() {
+        super.onResume()
+        recycler.scrollToPosition(lastPosition)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.savePositionToPreferences(lastPosition)
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.deleteFromDB()
+    }
+
+    private fun initRecyckler(): RecyclerView {
+        return binding.mainRecycler.apply {
             repoAdapter =
                 RepoListRecyclerAdapter(object : RepoListRecyclerAdapter.OnItemClickListener {
                     override fun click(repoResultItem: RepoResultItem) {
-                        viewModel.deleteAllFromDB()
-                        viewModel.putToDB(repos)
                         (requireActivity() as MainActivity).launchDetailsFragment(repoResultItem)
                     }
                 })
             adapter = repoAdapter
             layoutManager = LinearLayoutManager(requireContext())
+            layout = layoutManager as LinearLayoutManager
             val decorator = TopSpacingItemDecoration(PADDING)
             addItemDecoration(decorator)
         }
     }
 
-    private fun getReposFromApi() {
-        val allRepos = viewModel.getRepos(SINCE)
+    private fun getReposFromApi(since: String) {
+        val allRepos = viewModel.getRepos(since)
         allRepos.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -85,10 +123,13 @@ class HomeFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 },
-                onSuccess = {list ->
+                onSuccess = { list ->
                     repoAdapter.addItems(list)
                     list.forEach {
                         repos.add(it)
+                        if (lastPosition != 0) {
+                            recycler.scrollToPosition(lastPosition)
+                        }
                     }
                 }
             )

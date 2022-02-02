@@ -31,7 +31,6 @@ class RepoListRecyclerAdapter(private val clickListener: OnItemClickListener) :
     }
 
     fun addItems(list: List<RepoResultItem>) {
-        items.clear()
         items.addAll(list)
         notifyDataSetChanged()
     }

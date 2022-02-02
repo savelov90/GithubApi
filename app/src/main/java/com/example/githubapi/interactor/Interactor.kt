@@ -5,14 +5,17 @@ import com.example.githubapi.data.MainRepository
 import com.example.githubapi.data.api.RepoAPI
 import com.example.githubapi.data.api_data.commits.AllCommitsItem
 import com.example.githubapi.data.api_data.repos.RepoResultItem
+import com.example.newspaper.data.Preference.PreferenceProvider
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
+import java.text.FieldPosition
 
 private const val ITEM = 0
 
 class Interactor(
     private val repo: MainRepository,
-    private val retrofitService: RepoAPI
+    private val retrofitService: RepoAPI,
+    private val preferences: PreferenceProvider
 ) {
 
     fun getRepoFromApi(since: String): Single<MutableList<RepoResultItem>> = retrofitService
@@ -26,7 +29,6 @@ class Interactor(
             list
         }
         .doAfterSuccess {
-            repo.deleteAll()
             repo.putToDb(it)
         }
 
@@ -39,5 +41,9 @@ class Interactor(
 
     fun deleteFromDB() = repo.deleteAll()
 
-    fun putToDB(list: MutableList<RepoResultItem>) = repo.putToDb(list)
+    fun savePositionToPreferences(position: Int) {
+        preferences.saveRecyclerPosition(position)
+    }
+
+    fun getPositionFromPreferences(): Int = preferences.getRecyclerPosition()
 }

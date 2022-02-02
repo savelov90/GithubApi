@@ -23,7 +23,11 @@ class HomeFragmentViewModel : ViewModel() {
 
     fun getRepoFromDB(): Single<List<RepoResultItem>> = interactor.getRepoFromDB()
 
-    fun deleteAllFromDB() = interactor.deleteFromDB()
+    fun deleteFromDB() = interactor.deleteFromDB()
 
-    fun putToDB(list: MutableList<RepoResultItem>) = interactor.putToDB(list)
+    fun savePositionToPreferences(position: Int) {
+        interactor.savePositionToPreferences(position)
+    }
+
+    fun getPositionFromPreferences(): Int = interactor.getPositionFromPreferences()
 }
