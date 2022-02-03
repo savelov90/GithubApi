@@ -26,18 +26,18 @@ private const val PADDING = 10
 
 class HomeFragment : Fragment() {
 
+    private lateinit var binding: FragmentHomeBinding
     private lateinit var recycler: RecyclerView
     private lateinit var repoAdapter: RepoListRecyclerAdapter
-    private lateinit var binding: FragmentHomeBinding
-    private var lastPosition = 0
-    private var paginationID = 0
     lateinit var layout: LinearLayoutManager
-    var repos = mutableListOf<RepoResultItem>()
-    var launch = true
     private val autoDisposable = AutoDisposable()
     private val viewModel by lazy {
         ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
     }
+    var launch = true
+    var isLoading = false
+    private var lastPosition = 0
+    private var paginationID = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,10 +60,6 @@ class HomeFragment : Fragment() {
             launch = false
         } else {
             getLastSavedRepo()
-        }
-
-        binding.button.setOnClickListener {
-            getReposFromApi(paginationID.toString())
         }
 
         lastPosition = viewModel.getPositionFromPreferences()
@@ -107,7 +103,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun initRecycklerScroll() {
-        var isLoading = false
         recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -124,7 +119,7 @@ class HomeFragment : Fragment() {
 
                 if (!isLoading) {
                     if (visibleItemCount + firstVisibleItems >= totalItemCount) {
-
+                        isLoading = true
                         getReposFromApi(paginationID.toString())
                     }
                 }
@@ -144,15 +139,19 @@ class HomeFragment : Fragment() {
                         getString(R.string.toast_home_api),
                         Toast.LENGTH_SHORT
                     ).show()
+                    isLoading = false
                 },
                 onSuccess = { list ->
                     repoAdapter.addItems(list)
                     if (lastPosition != 0) {
                         recycler.scrollToPosition(lastPosition)
                     }
+                    if (launch) {
+                        recycler.scrollToPosition(lastPosition.plus(2))
+                    }
                     val lastID = list.last().id
                     setPaginationID(lastID)
-                    println(lastID)
+                    isLoading = false
                 }
             )
             .addTo(autoDisposable)
