@@ -23,7 +23,6 @@ import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 private const val PADDING = 10
-private const val SINCE = "0"
 
 class HomeFragment : Fragment() {
 
@@ -50,18 +49,10 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         autoDisposable.bindTo(lifecycle)
-
         recycler = initRecyckler()
-        recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                lastPosition = layout.findFirstCompletelyVisibleItemPosition()
-            }
-        })
-        repoAdapter.stateRestorationPolicy =
-            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-
+        initRecycklerScroll()
         paginationID = viewModel.getPaginationID()
 
         if (launch) {
@@ -93,6 +84,7 @@ class HomeFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.savePaginationID(0)
+        viewModel.savePositionToPreferences(0)
         viewModel.deleteFromDB()
     }
 
@@ -104,12 +96,40 @@ class HomeFragment : Fragment() {
                         (requireActivity() as MainActivity).launchDetailsFragment(repoResultItem)
                     }
                 })
+            repoAdapter.stateRestorationPolicy =
+                RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             adapter = repoAdapter
             layoutManager = LinearLayoutManager(requireContext())
             layout = layoutManager as LinearLayoutManager
             val decorator = TopSpacingItemDecoration(PADDING)
             addItemDecoration(decorator)
         }
+    }
+
+    private fun initRecycklerScroll() {
+        var isLoading = false
+        recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                lastPosition = layout.findFirstCompletelyVisibleItemPosition()
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as RecyclerView.LayoutManager
+                val visibleItemCount: Int = layoutManager.childCount
+                val totalItemCount: Int = layoutManager.itemCount
+                val firstVisibleItems =
+                    (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+
+                if (!isLoading) {
+                    if (visibleItemCount + firstVisibleItems >= totalItemCount) {
+
+                        getReposFromApi(paginationID.toString())
+                    }
+                }
+            }
+        })
     }
 
     private fun getReposFromApi(since: String) {
