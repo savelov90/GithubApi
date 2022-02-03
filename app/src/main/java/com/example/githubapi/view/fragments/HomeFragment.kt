@@ -60,10 +60,8 @@ class HomeFragment : Fragment() {
         lastPosition = viewModel.getPositionFromPreferences()
 
         if (launch) {
-            paginationID = PAGINATION_ID_STR
-            println(paginationID)
             lastPosition = LAST_POS_STR
-            getReposFromApi(paginationID.toString())
+            getReposFromApi(PAGINATION_ID_STR.toString())
             launch = false
         } else {
             getLastSavedRepo()
