@@ -89,9 +89,10 @@ class DetailsFragment : Fragment() {
         binding.detailsCommitDate.text = editData(commitsItem.commit.author.date)
     }
 
-    private fun editData(data:String) : String {
+    private fun editData(data: String): String {
         val edit = data.toCharArray()
-        val string = "${edit[8]}" + "${edit[9]}" + "." + "${edit[5]}" + "${edit[6]}" + "." + "${edit[0]}" + "${edit[1]}" + "${edit[2]}" + "${edit[3]}"
+        val string =
+            "${edit[8]}" + "${edit[9]}" + "." + "${edit[5]}" + "${edit[6]}" + "." + "${edit[0]}" + "${edit[1]}" + "${edit[2]}" + "${edit[3]}"
         return string
     }
 }

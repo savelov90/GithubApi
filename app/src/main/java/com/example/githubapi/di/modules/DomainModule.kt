@@ -3,8 +3,8 @@ package com.example.githubapi.di.modules
 import android.content.Context
 import com.example.githubapi.data.MainRepository
 import com.example.githubapi.data.api.RepoAPI
+import com.example.githubapi.data.preference.PreferenceProvider
 import com.example.githubapi.interactor.Interactor
-import com.example.newspaper.data.Preference.PreferenceProvider
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

@@ -5,10 +5,9 @@ import com.example.githubapi.data.MainRepository
 import com.example.githubapi.data.api.RepoAPI
 import com.example.githubapi.data.api_data.commits.AllCommitsItem
 import com.example.githubapi.data.api_data.repos.RepoResultItem
-import com.example.newspaper.data.Preference.PreferenceProvider
+import com.example.githubapi.data.preference.PreferenceProvider
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
-import java.text.FieldPosition
 
 private const val ITEM = 0
 
@@ -46,4 +45,10 @@ class Interactor(
     }
 
     fun getPositionFromPreferences(): Int = preferences.getRecyclerPosition()
+
+    fun savePaginationID(id: Int) {
+        preferences.savePaginationID(id)
+    }
+
+    fun getPaginationID(): Int = preferences.getPaginationID()
 }

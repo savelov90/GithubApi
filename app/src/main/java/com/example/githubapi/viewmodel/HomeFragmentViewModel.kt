@@ -30,4 +30,10 @@ class HomeFragmentViewModel : ViewModel() {
     }
 
     fun getPositionFromPreferences(): Int = interactor.getPositionFromPreferences()
+
+    fun savePaginationID(id: Int) {
+        interactor.savePaginationID(id)
+    }
+
+    fun getPaginationID(): Int = interactor.getPaginationID()
 }

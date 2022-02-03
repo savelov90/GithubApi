@@ -30,8 +30,8 @@ class HomeFragment : Fragment() {
     private lateinit var recycler: RecyclerView
     private lateinit var repoAdapter: RepoListRecyclerAdapter
     private lateinit var binding: FragmentHomeBinding
-
     private var lastPosition = 0
+    private var paginationID = 0
     lateinit var layout: LinearLayoutManager
     var repos = mutableListOf<RepoResultItem>()
     var launch = true
@@ -62,20 +62,21 @@ class HomeFragment : Fragment() {
         repoAdapter.stateRestorationPolicy =
             RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
+        paginationID = viewModel.getPaginationID()
+
         if (launch) {
-            getReposFromApi(SINCE)
+            getReposFromApi(paginationID.toString())
             launch = false
         } else {
             getLastSavedRepo()
         }
 
         binding.button.setOnClickListener {
-            getReposFromApi("100")
+            getReposFromApi(paginationID.toString())
         }
 
         lastPosition = viewModel.getPositionFromPreferences()
         recycler.scrollToPosition(lastPosition)
-        println(lastPosition)
     }
 
     override fun onResume() {
@@ -86,11 +87,12 @@ class HomeFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         viewModel.savePositionToPreferences(lastPosition)
+        viewModel.savePaginationID(paginationID)
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
+        viewModel.savePaginationID(0)
         viewModel.deleteFromDB()
     }
 
@@ -116,7 +118,7 @@ class HomeFragment : Fragment() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onError = {
-                    getLastSavedRepo()
+                    if (lastPosition < 10) getLastSavedRepo()
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.toast_home_api),
@@ -125,15 +127,19 @@ class HomeFragment : Fragment() {
                 },
                 onSuccess = { list ->
                     repoAdapter.addItems(list)
-                    list.forEach {
-                        repos.add(it)
-                        if (lastPosition != 0) {
-                            recycler.scrollToPosition(lastPosition)
-                        }
+                    if (lastPosition != 0) {
+                        recycler.scrollToPosition(lastPosition)
                     }
+                    val lastID = list.last().id
+                    setPaginationID(lastID)
+                    println(lastID)
                 }
             )
             .addTo(autoDisposable)
+    }
+
+    private fun setPaginationID(id: Int) {
+        paginationID = id
     }
 
     private fun getLastSavedRepo() {
@@ -150,6 +156,9 @@ class HomeFragment : Fragment() {
                 },
                 onSuccess = {
                     repoAdapter.addItems(it)
+                    if (lastPosition != 0) {
+                        recycler.scrollToPosition(lastPosition)
+                    }
                 }
             )
             .addTo(autoDisposable)

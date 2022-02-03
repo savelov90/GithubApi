@@ -17,5 +17,6 @@ class DetailsFragmentViewModel : ViewModel() {
         App.instance.dagger.inject(this)
     }
 
-    fun getCommit(login: String, fullName: String): Single<AllCommitsItem> = interactor.getCommitsFromApi(login, fullName)
+    fun getCommit(login: String, fullName: String): Single<AllCommitsItem> =
+        interactor.getCommitsFromApi(login, fullName)
 }
