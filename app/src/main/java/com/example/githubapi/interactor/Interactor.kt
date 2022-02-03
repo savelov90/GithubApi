@@ -1,6 +1,7 @@
 package com.example.githubapi.interactor
 
 
+import androidx.core.content.edit
 import com.example.githubapi.data.MainRepository
 import com.example.githubapi.data.api.RepoAPI
 import com.example.githubapi.data.api_data.commits.AllCommitsItem
@@ -51,4 +52,12 @@ class Interactor(
     }
 
     fun getPaginationID(): Int = preferences.getPaginationID()
+
+    fun saveLaunch(launch: Boolean) {
+        preferences.saveLaunch(launch)
+    }
+
+    fun getLaunch(): Boolean {
+        return preferences.getLaunch()
+    }
 }

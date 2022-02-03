@@ -23,21 +23,23 @@ import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 private const val PADDING = 10
+private const val LAST_POS_STR = 0
+private const val PAGINATION_ID_STR = 0
 
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var recycler: RecyclerView
     private lateinit var repoAdapter: RepoListRecyclerAdapter
-    lateinit var layout: LinearLayoutManager
+    private lateinit var layout: LinearLayoutManager
     private val autoDisposable = AutoDisposable()
     private val viewModel by lazy {
         ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
     }
-    var launch = true
-    var isLoading = false
-    private var lastPosition = 0
-    private var paginationID = 0
+    private var launch = true
+    private var isLoading = false
+    private var lastPosition = LAST_POS_STR
+    private var paginationID = PAGINATION_ID_STR
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,18 +53,22 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         autoDisposable.bindTo(lifecycle)
+        initPullToRefresh()
         recycler = initRecyckler()
         initRecycklerScroll()
         paginationID = viewModel.getPaginationID()
+        lastPosition = viewModel.getPositionFromPreferences()
 
         if (launch) {
+            paginationID = PAGINATION_ID_STR
+            println(paginationID)
+            lastPosition = LAST_POS_STR
             getReposFromApi(paginationID.toString())
             launch = false
         } else {
             getLastSavedRepo()
         }
 
-        lastPosition = viewModel.getPositionFromPreferences()
         recycler.scrollToPosition(lastPosition)
     }
 
@@ -79,9 +85,7 @@ class HomeFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.savePaginationID(0)
-        viewModel.savePositionToPreferences(0)
-        viewModel.deleteFromDB()
+        clearResources()
     }
 
     private fun initRecyckler(): RecyclerView {
@@ -127,13 +131,22 @@ class HomeFragment : Fragment() {
         })
     }
 
+    private fun initPullToRefresh() {
+        binding.pullToRefresh.setOnRefreshListener {
+            clearResources()
+            println(paginationID)
+            getReposFromApi(PAGINATION_ID_STR.toString())
+            binding.pullToRefresh.isRefreshing = false
+        }
+    }
+
     private fun getReposFromApi(since: String) {
         val allRepos = viewModel.getRepos(since)
         allRepos.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onError = {
-                    if (lastPosition < 10) getLastSavedRepo()
+                    if (lastPosition < LAST_POS_STR.plus(9)) getLastSavedRepo()
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.toast_home_api),
@@ -143,11 +156,8 @@ class HomeFragment : Fragment() {
                 },
                 onSuccess = { list ->
                     repoAdapter.addItems(list)
-                    if (lastPosition != 0) {
+                    if (lastPosition != LAST_POS_STR) {
                         recycler.scrollToPosition(lastPosition)
-                    }
-                    if (launch) {
-                        recycler.scrollToPosition(lastPosition.plus(2))
                     }
                     val lastID = list.last().id
                     setPaginationID(lastID)
@@ -175,11 +185,18 @@ class HomeFragment : Fragment() {
                 },
                 onSuccess = {
                     repoAdapter.addItems(it)
-                    if (lastPosition != 0) {
+                    if (lastPosition != LAST_POS_STR) {
                         recycler.scrollToPosition(lastPosition)
                     }
                 }
             )
             .addTo(autoDisposable)
+    }
+
+    private fun clearResources() {
+        repoAdapter.items.clear()
+        viewModel.savePaginationID(PAGINATION_ID_STR)
+        viewModel.savePositionToPreferences(LAST_POS_STR)
+        viewModel.deleteFromDB()
     }
 }

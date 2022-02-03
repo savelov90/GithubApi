@@ -36,4 +36,12 @@ class HomeFragmentViewModel : ViewModel() {
     }
 
     fun getPaginationID(): Int = interactor.getPaginationID()
+
+    fun saveLaunch(launch: Boolean) {
+        interactor.saveLaunch(launch)
+    }
+
+    fun getLaunch(): Boolean {
+        return interactor.getLaunch()
+    }
 }
