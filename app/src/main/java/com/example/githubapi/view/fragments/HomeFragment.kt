@@ -53,6 +53,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.progressBar.isVisible = false
         autoDisposable.bindTo(lifecycle)
         initPullToRefresh()
         recycler = initRecyckler()
@@ -141,6 +142,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun getReposFromApi(since: String) {
+        binding.progressBar.isVisible = true
         val allRepos = viewModel.getRepos(since)
         allRepos.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -153,6 +155,7 @@ class HomeFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                     isLoading = false
+                    binding.progressBar.isVisible = false
                 },
                 onSuccess = { list ->
                     repoAdapter.addItems(list)
@@ -162,7 +165,8 @@ class HomeFragment : Fragment() {
                     val lastID = list.last().id
                     setPaginationID(lastID)
                     isLoading = false
-                }
+                    binding.progressBar.isVisible = false
+                },
             )
             .addTo(autoDisposable)
     }

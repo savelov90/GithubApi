@@ -16,4 +16,8 @@
     <dimen name="details_text_margin_top">15dp</dimen>
     <dimen name="details_text_margin_bottom">40dp</dimen>
 
+    <!-- progress bar -->
+    <dimen name="translation_dp">10dp</dimen>
+    <dimen name="progress_dp">100dp</dimen>
+
 </resources>

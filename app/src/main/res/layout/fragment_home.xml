@@ -30,4 +30,17 @@
         app:layout_constraintRight_toRightOf="parent"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="@dimen/progress_dp"
+        android:layout_height="@dimen/progress_dp"
+        android:indeterminateTintMode="src_in"
+        android:indeterminateTint="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:alpha="50"
+        android:translationZ="@dimen/translation_dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
