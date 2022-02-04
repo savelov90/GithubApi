@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/details_text_margin_top"
-        android:layout_marginBottom="40dp">
+        android:layout_marginBottom="@dimen/details_text_margin_bottom">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/details_cardview"
@@ -80,7 +80,7 @@
             android:layout_marginStart="@dimen/details_text_margin_top"
             android:layout_marginTop="@dimen/details_text_margin_top"
             android:background="@drawable/background_text_view"
-            android:padding="@dimen/margin_recycler"
+            android:padding="@dimen/details_margin_recycler"
             android:textAppearance="?android:attr/textAppearanceMedium"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/details_text_margin_top"
             android:ellipsize="end"
-            android:maxWidth="200dp"
+            android:maxWidth="@dimen/details_max_width"
             android:maxLines="1"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"

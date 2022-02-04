@@ -1,5 +1,5 @@
 <resources>
-    <!-- item_view -->
+    <!-- repo_item -->
     <dimen name="item_height_dp">80dp</dimen>
     <dimen name="item_elevation_dp">1dp</dimen>
     <dimen name="item_corner_dp">10dp</dimen>
@@ -7,17 +7,21 @@
     <dimen name="item_text_margin_start">15dp</dimen>
     <dimen name="item_text_margin_top">8dp</dimen>
     <dimen name="item_text_height">20dp</dimen>
+    <dimen name="item_text_width">240dp</dimen>
 
     <!-- details_fragment -->
-    <dimen name="margin">15dp</dimen>
-    <dimen name="margin_recycler">5dp</dimen>
+    <dimen name="details_margin">15dp</dimen>
+    <dimen name="details_margin_bottom">40dp</dimen>
+    <dimen name="details_margin_recycler">5dp</dimen>
+    <dimen name="details_max_width">200dp</dimen>
     <dimen name="details_corner_dp">10dp</dimen>
     <dimen name="card_margin_top">20dp</dimen>
     <dimen name="details_text_margin_top">15dp</dimen>
     <dimen name="details_text_margin_bottom">40dp</dimen>
 
-    <!-- progress bar -->
-    <dimen name="translation_dp">10dp</dimen>
+    <!-- home_fragment -->
+    <dimen name="progress_translation_dp">10dp</dimen>
     <dimen name="progress_dp">100dp</dimen>
+    <dimen name="home_recycler_margin">10dp</dimen>
 
 </resources>

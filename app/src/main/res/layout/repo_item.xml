@@ -33,29 +33,29 @@
 
         <TextView
             android:id="@+id/owner_name"
-            android:layout_width="240dp"
+            android:layout_width="@dimen/item_text_width"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/item_text_margin_start"
             android:layout_marginTop="@dimen/item_text_margin_top"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textAlignment="viewStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintLeft_toRightOf="@+id/pict"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@tools:sample/lorem/random" />
 
         <TextView
             android:id="@+id/repo_name"
-            android:layout_width="240dp"
+            android:layout_width="@dimen/item_text_width"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/item_text_margin_start"
             android:layout_marginTop="@dimen/item_text_margin_top"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintLeft_toRightOf="@+id/pict"
             app:layout_constraintTop_toBottomOf="@+id/owner_name"
             tools:text="@tools:sample/lorem/random" />

@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 
 class PreferenceProvider(context: Context) {
-
     private val appContext = context.applicationContext
     private val preference: SharedPreferences =
         appContext.getSharedPreferences("settings", Context.MODE_PRIVATE)
@@ -41,6 +40,5 @@ class PreferenceProvider(context: Context) {
         private const val PAGINATION_ID = 0
         private const val KEY_LAUNCH = "LAUNCHER"
         private const val LAUNCH = true
-
     }
 }

@@ -37,7 +37,7 @@ class HomeFragment : Fragment() {
     private val viewModel by lazy {
         ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
     }
-    private var launch = true
+    private var isLaunched = true
     private var isLoading = false
     private var lastPosition = LAST_POS_STR
     private var paginationID = PAGINATION_ID_STR
@@ -56,15 +56,15 @@ class HomeFragment : Fragment() {
         binding.progressBar.isVisible = false
         autoDisposable.bindTo(lifecycle)
         initPullToRefresh()
-        recycler = initRecyckler()
-        initRecycklerScroll()
+        recycler = initRecycler()
+        initRecyclerScroll()
         paginationID = viewModel.getPaginationID()
         lastPosition = viewModel.getPositionFromPreferences()
 
-        if (launch) {
+        if (isLaunched) {
             lastPosition = LAST_POS_STR
             getReposFromApi(PAGINATION_ID_STR.toString())
-            launch = false
+            isLaunched = false
         } else {
             getLastSavedRepo()
         }
@@ -88,7 +88,7 @@ class HomeFragment : Fragment() {
         clearResources()
     }
 
-    private fun initRecyckler(): RecyclerView {
+    private fun initRecycler(): RecyclerView {
         return binding.mainRecycler.apply {
             repoAdapter =
                 RepoListRecyclerAdapter(object : RepoListRecyclerAdapter.OnItemClickListener {
@@ -106,7 +106,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun initRecycklerScroll() {
+    private fun initRecyclerScroll() {
         recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)

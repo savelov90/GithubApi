@@ -7,7 +7,6 @@ import com.example.githubapi.interactor.Interactor
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
-
 class DetailsFragmentViewModel : ViewModel() {
 
     @Inject

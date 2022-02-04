@@ -9,7 +9,6 @@ import com.squareup.picasso.Picasso
 
 
 class RepoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
     private val repoItemBinding = RepoItemBinding.bind(itemView)
     private val name = repoItemBinding.ownerName
     private val repo = repoItemBinding.repoName

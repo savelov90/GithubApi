@@ -1,6 +1,5 @@
 package com.example.githubapi.di.modules
 
-
 import com.example.githubapi.BuildConfig
 import com.example.githubapi.data.api.ApiConstants
 import com.example.githubapi.data.api.RepoAPI
@@ -13,7 +12,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-
 
 @Module
 class RemoteModule {

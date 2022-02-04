@@ -8,9 +8,7 @@ import java.util.concurrent.Executors
 class MainRepository(private val repoDAO: RepoDAO) {
 
     fun putToDb(listRepoResult: MutableList<RepoResultItem>) {
-        Executors.newSingleThreadExecutor().execute {
-            repoDAO.insertAll(listRepoResult)
-        }
+        repoDAO.insertAll(listRepoResult)
     }
 
     fun getAllFromDB(): Single<List<RepoResultItem>> = repoDAO.getCachedNews()

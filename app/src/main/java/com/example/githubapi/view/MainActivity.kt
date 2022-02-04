@@ -2,7 +2,6 @@ package com.example.githubapi.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.githubapi.App
 import com.example.githubapi.R
 import com.example.githubapi.data.api_data.repos.RepoResultItem
 import com.example.githubapi.databinding.ActivityMainBinding

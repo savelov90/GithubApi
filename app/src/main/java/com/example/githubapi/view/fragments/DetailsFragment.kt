@@ -22,9 +22,6 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-
-private const val KEY = "repo"
-
 class DetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailsBinding
@@ -53,14 +50,10 @@ class DetailsFragment : Fragment() {
         val repo = arguments?.getParcelable<RepoResultItem>(MainActivity.KEY)
         repo?.let { getCommitFromApi(it.owner.login, it.name) }
 
-        if (repo != null) {
-            Picasso.get()
-                .load(repo.owner.avatar_url)
-                .error(android.R.drawable.stat_notify_error)
-                .into(binding.detailsAvatar)
-        } else {
-            binding.detailsAvatar.setImageResource(R.drawable.white)
-        }
+        if (repo != null) Picasso.get()
+            .load(repo.owner.avatar_url)
+            .error(android.R.drawable.stat_notify_error)
+            .into(binding.detailsAvatar) else binding.detailsAvatar.setImageResource(R.drawable.white)
 
         binding.detailsLogin.text = repo?.owner?.login
         binding.detailsRepoName.text = repo?.name
@@ -107,8 +100,6 @@ class DetailsFragment : Fragment() {
 
     private fun editData(data: String): String {
         val edit = data.toCharArray()
-        val string =
-            "${edit[8]}" + "${edit[9]}" + "." + "${edit[5]}" + "${edit[6]}" + "." + "${edit[0]}" + "${edit[1]}" + "${edit[2]}" + "${edit[3]}"
-        return string
+        return "${edit[8]}" + "${edit[9]}" + "." + "${edit[5]}" + "${edit[6]}" + "." + "${edit[0]}" + "${edit[1]}" + "${edit[2]}" + "${edit[3]}"
     }
 }
