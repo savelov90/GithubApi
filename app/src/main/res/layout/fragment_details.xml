@@ -10,15 +10,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:layout_marginEnd="@dimen/details_text_margin_top">
+        android:layout_marginEnd="@dimen/details_text_margin_top"
+        android:layout_marginBottom="40dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/details_cardview"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            app:cardCornerRadius="@dimen/details_corner_dp"
             android:layout_marginTop="@dimen/details_text_margin_top"
+            app:cardCornerRadius="@dimen/details_corner_dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -35,11 +35,11 @@
             android:id="@+id/details_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/details_text_margin_top"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold"
-            android:layout_marginTop="@dimen/details_text_margin_top"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/details_cardview"
@@ -51,8 +51,8 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textSize="@dimen/item_text_size_sp"
             android:textColor="@color/red"
+            android:textSize="@dimen/item_text_size_sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/details_login"
@@ -62,41 +62,41 @@
             android:id="@+id/last_commit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/details_text_margin_top"
             android:layout_marginTop="30dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:layout_marginStart="@dimen/details_text_margin_top"
+            android:text="@string/last_commit"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold"
             android:textColor="@color/black"
+            android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/details_repo_name"
-            android:text="@string/last_commit" />
+            app:layout_constraintTop_toBottomOf="@id/details_repo_name" />
 
         <TextView
             android:id="@+id/details_commit_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:background="@drawable/background_text_view"
-            android:layout_marginTop="@dimen/details_text_margin_top"
             android:layout_marginStart="@dimen/details_text_margin_top"
+            android:layout_marginTop="@dimen/details_text_margin_top"
+            android:background="@drawable/background_text_view"
+            android:padding="@dimen/margin_recycler"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/last_commit"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             tools:text="Commit message" />
 
         <TextView
             android:id="@+id/details_commiter_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/details_text_margin_top"
             android:ellipsize="end"
-            android:maxLines="1"
             android:maxWidth="200dp"
+            android:maxLines="1"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:layout_marginEnd="@dimen/details_text_margin_top"
             app:layout_constraintRight_toLeftOf="@id/details_commit_date"
             app:layout_constraintTop_toBottomOf="@id/details_commit_message"
             tools:text="@tools:sample/lorem/random" />
@@ -109,23 +109,34 @@
             android:textColor="@color/black"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/details_commit_message"
-            tools:text="01.01.1990"
-            tools:maxLines="1"/>
+            tools:maxLines="1"
+            tools:text="01.01.1990" />
 
         <TextView
             android:id="@+id/parents"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/details_text_margin_top"
             android:layout_marginTop="@dimen/details_text_margin_top"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="@string/parents"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold"
             android:textColor="@color/black"
-            android:layout_marginStart="@dimen/details_text_margin_top"
+            android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/details_commiter_name"
-            android:text="@string/parents" />
+            app:layout_constraintTop_toBottomOf="@id/details_commiter_name" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/parents_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/details_text_margin_top"
+            android:layout_marginTop="@dimen/details_corner_dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@+id/parents"
+            tools:listitem="@layout/parent_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

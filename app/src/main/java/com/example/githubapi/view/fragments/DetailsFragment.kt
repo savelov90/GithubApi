@@ -1,6 +1,5 @@
 package com.example.githubapi.view.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,12 +7,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.githubapi.R
 import com.example.githubapi.data.api_data.commits.AllCommitsItem
 import com.example.githubapi.data.api_data.repos.RepoResultItem
 import com.example.githubapi.databinding.FragmentDetailsBinding
 import com.example.githubapi.disposable.AutoDisposable
 import com.example.githubapi.disposable.addTo
+import com.example.githubapi.view.MainActivity
+import com.example.githubapi.view.rv_adapters.ParentsAdapter
 import com.example.githubapi.viewmodel.DetailsFragmentViewModel
 import com.squareup.picasso.Picasso
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -26,6 +28,7 @@ private const val KEY = "repo"
 class DetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailsBinding
+    private lateinit var parentsAdapter: ParentsAdapter
     private val autoDisposable = AutoDisposable()
     private val viewModel by lazy {
         ViewModelProvider.NewInstanceFactory().create(DetailsFragmentViewModel::class.java)
@@ -42,12 +45,12 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         autoDisposable.bindTo(lifecycle)
+        initRecyclerParent()
         setRepoDetails()
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setRepoDetails() {
-        val repo = arguments?.getParcelable<RepoResultItem>(KEY)
+        val repo = arguments?.getParcelable<RepoResultItem>(MainActivity.KEY)
         repo?.let { getCommitFromApi(it.owner.login, it.name) }
 
         if (repo != null) {
@@ -87,6 +90,19 @@ class DetailsFragment : Fragment() {
         binding.detailsCommitMessage.text = commitsItem.commit.message
         binding.detailsCommiterName.text = commitsItem.commit.author.name
         binding.detailsCommitDate.text = editData(commitsItem.commit.author.date)
+        val listParents = mutableListOf<String>()
+        commitsItem.parents.forEach {
+            listParents.add(it.sha)
+        }
+        parentsAdapter.addItems(listParents)
+    }
+
+    private fun initRecyclerParent() {
+        binding.parentsRecycler.apply {
+            parentsAdapter = ParentsAdapter()
+            adapter = parentsAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
     }
 
     private fun editData(data: String): String {

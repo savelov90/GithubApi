@@ -10,6 +10,7 @@
 
     <!-- details_fragment -->
     <dimen name="margin">15dp</dimen>
+    <dimen name="margin_recycler">5dp</dimen>
     <dimen name="details_corner_dp">10dp</dimen>
     <dimen name="card_margin_top">20dp</dimen>
     <dimen name="details_text_margin_top">15dp</dimen>

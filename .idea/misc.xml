@@ -4,8 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Eugene/AndroidStudioProjects/GithubApi/app/src/main/res/drawable/background_search_view.xml" value="0.4462962962962963" />
-        <entry key="..\:/Users/Eugene/AndroidStudioProjects/GithubApi/app/src/main/res/layout/fragment_details.xml" value="0.25" />
+        <entry key="..\:/Users/Eugene/AndroidStudioProjects/GithubApi/app/src/main/res/layout/fragment_details.xml" value="0.5" />
         <entry key="..\:/Users/Eugene/AndroidStudioProjects/GithubApi/app/src/main/res/layout/fragment_home.xml" value="0.21422101449275363" />
+        <entry key="..\:/Users/Eugene/AndroidStudioProjects/GithubApi/app/src/main/res/layout/parent_item.xml" value="0.42346014492753625" />
         <entry key="..\:/Users/Eugene/AndroidStudioProjects/GithubApi/app/src/main/res/layout/repo_item.xml" value="0.2609375" />
       </map>
     </option>
